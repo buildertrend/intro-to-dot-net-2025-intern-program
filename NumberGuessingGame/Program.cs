@@ -18,7 +18,7 @@ namespace NumberGuessingGame
     // This class handles the main game logic
     class GameManager
     {
-        private Player currentPlayer;
+        private Player player1;
         private int targetNumber;
         private int attemptsLimit;
         private int currentAttempts;
@@ -28,9 +28,14 @@ namespace NumberGuessingGame
         // Constructor to initialize the game
         public GameManager()
         {
-            currentPlayer = new Player();
+            player1 = new Player();
             // Default difficulty is set to medium
             currentDifficulty = DifficultyLevel.Medium;
+            player1.bestLevel = DifficultyLevel.Easy;
+            player1.bestScore = 10;
+
+
+
         }
 
         // Main game loop
@@ -92,9 +97,9 @@ namespace NumberGuessingGame
             Console.WriteLine("\nPlease enter your name:");
             
             string playerName = Console.ReadLine();
-            currentPlayer.Name = string.IsNullOrWhiteSpace(playerName) ? "Player" : playerName;
+            player1.Name = string.IsNullOrWhiteSpace(playerName) ? "Player" : playerName;
             
-            Console.WriteLine($"\nHello, {currentPlayer.Name}!");
+            Console.WriteLine($"\nHello, {player1.Name}!");
             Console.WriteLine("I'm thinking of a number... Can you guess it?");
             Console.WriteLine("\nPress any key to start!");
             Console.ReadKey();
@@ -163,10 +168,11 @@ namespace NumberGuessingGame
                     // TODO: Add color to the console output (Part 4)
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine($"\nCorrect! You guessed the number in {currentAttempts} attempts.");
-                    currentPlayer.bestLevel = DifficultyLevel.Easy;
-                    if (currentAttempts< currentPlayer.bestScore && currentDifficulty > currentPlayer.bestLevel)
+                    if (currentAttempts< player1.bestScore && currentDifficulty > player1.bestLevel)
                     {
-                        currentPlayer.bestScore = currentAttempts;
+                        player1.bestScore = currentAttempts;
+                        player1.bestLevel = currentDifficulty;
+
 
                     }
                 }
@@ -241,7 +247,7 @@ namespace NumberGuessingGame
                 // TODO: Add color to the console output (Part 4)
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Congratulations! You won the game!");
-                currentPlayer.GamesWon++;
+                player1.GamesWon++;
                 
                 // TODO: Update player statistics (Part 3)
                 // Update the best score for the current difficulty level
@@ -253,7 +259,7 @@ namespace NumberGuessingGame
 
                 Console.WriteLine("Game Over! You've run out of attempts.");
                 Console.WriteLine($"The number was: {targetNumber}");
-                currentPlayer.GamesLost++;
+                player1.GamesLost++;
                 
                 // TODO: Update player statistics (Part 3)
             }
@@ -277,13 +283,13 @@ namespace NumberGuessingGame
             Console.WriteLine("===========================================");
             Console.WriteLine("              FINAL STATS                  ");
             Console.WriteLine("===========================================");
-            Console.WriteLine($"Player: {currentPlayer.Name}");
-            Console.WriteLine($"Games Played: {currentPlayer.GamesPlayed}");
-            Console.WriteLine($"Games Won: {currentPlayer.GamesWon}");
-            Console.WriteLine($"Win Rate: {currentPlayer.WinRate:P2}");
+            Console.WriteLine($"Player: {player1.Name}");
+            Console.WriteLine($"Games Played: {player1.GamesPlayed}");
+            Console.WriteLine($"Games Won: {player1.GamesWon}");
+            Console.WriteLine($"Win Rate: {player1.WinRate:P2}");
             //if (currentPlayer.bestScore > 0)
             //{
-                Console.WriteLine($"Best Score: Guessed in {currentPlayer.bestScore} attempts for level {currentDifficulty}");
+                Console.WriteLine($"Best Score: Guessed in {player1.bestScore} attempts for level {player1.bestLevel}");
            // }
             // TODO: Display best scores (Part 3 & 5)
 
