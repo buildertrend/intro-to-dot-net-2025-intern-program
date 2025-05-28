@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection.Metadata.Ecma335;
 
 namespace NumberGuessingGame
 {
@@ -24,6 +25,11 @@ namespace NumberGuessingGame
         private int currentAttempts;
         private bool gameWon;
         private DifficultyLevel currentDifficulty;
+        private int bestScore = 0;
+        private int numPlayers = 1;
+        private int[] playerScores;
+        
+        
 
         // Constructor to initialize the game
         public GameManager()
@@ -46,14 +52,49 @@ namespace NumberGuessingGame
                 
                 // Initialize game settings based on difficulty
                 InitializeGameSettings();
+                Console.WriteLine($"{numPlayers} players playing");
                 
-                // Generate target number - FIX ME! (Part 1)
-                GenerateTargetNumber();
+                for (int i = 0; i < numPlayers; i++)
+                {
+                    // Generate target number - FIX ME! (Part 1)
+                    GenerateTargetNumber();
+                    
+                    Console.Clear();
+                    
+                    if (numPlayers > 1)
+                    {
+                        Console.WriteLine("------------------------------------------");
+                        Console.WriteLine($"Player {i + 1}'s Turn");
+                        Console.WriteLine("------------------------------------------");
+
+                    }
+                    playerScores[i] = PlayGame();
                 
-                PlayGame();
-                
-                DisplayGameResults();
-                
+                    DisplayGameResults();
+                    if (numPlayers > 1 && i < numPlayers - 1)
+                    {
+                        Console.WriteLine("\nPress any key to start next player's turn.");
+                        Console.ReadKey();
+                    }
+                }
+
+                if (numPlayers > 1)
+                {
+                    Console.WriteLine("==========================================");
+                    int minValue = 100;
+                    int minPlayer = 0;
+                    for (int i = 0; i < numPlayers; i++)
+                    {
+                        if (playerScores[i] <= minValue)
+                        {
+                            minValue = playerScores[i];
+                            minPlayer = i + 1;
+                        }
+                        Console.WriteLine($"\nPlayer {i + 1}: {playerScores[i]}");
+                    }
+                    Console.WriteLine($"\n\nPlayer {minPlayer} with a score of {playerScores[minPlayer - 1]} wins!!\n");
+                    Console.WriteLine("==========================================");
+                }
                 continuePlaying = AskToPlayAgain();
             }
 
@@ -87,6 +128,18 @@ namespace NumberGuessingGame
                     currentDifficulty = DifficultyLevel.Medium;
                     break;
             }
+
+            while (true) 
+            {
+                Console.WriteLine("Please enter the amount of players (1-4)");
+                numPlayers = int.Parse(Console.ReadLine());
+                if (numPlayers > 0 && numPlayers <= 4) 
+                {
+                    playerScores = new int[numPlayers];
+                    break;
+                }
+            }
+
             Console.WriteLine("I'm thinking of a number... Can you guess it?");
             Console.WriteLine("\nPress any key to start!");
             Console.ReadKey();
@@ -139,9 +192,9 @@ namespace NumberGuessingGame
             gameWon = false;
         }
 
-        private void PlayGame()
+        private int PlayGame()
         {
-            Console.Clear();
+            
             DisplayGameInfo();
 
             while (currentAttempts < attemptsLimit && !gameWon)
@@ -155,24 +208,35 @@ namespace NumberGuessingGame
                     // TODO: Add color to the console output (Part 4)
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine($"\nCorrect! You guessed the number in {currentAttempts} attempts.");
+                    bestScore = currentAttempts;
+                    Console.WriteLine($"Best Score: {bestScore}");
+
                     Console.ForegroundColor = ConsoleColor.White;
+
+                    bestScore = currentAttempts;
                 }
                 else
                 {
                     // TODO: Add color to the console output (Part 4)
                     string hint = guess < targetNumber ? "higher" : "lower";
-                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"Wrong! Try a {hint} number. Attempts left: {attemptsLimit - currentAttempts}");
                     Console.ForegroundColor = ConsoleColor.White;
 
                 }
             }
+
+            return currentAttempts;
         }
 
         private void DisplayGameInfo()
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine($"Difficulty: {currentDifficulty}");
+            if (bestScore > 0)
+            {
+                Console.WriteLine($"Best Score: {bestScore}");
+            }
             Console.WriteLine($"Guess a number between 1 and {GetRangeForDifficulty()}");
             Console.WriteLine($"You have {attemptsLimit} attempts.");
             Console.WriteLine("----------------------------------------");
@@ -250,7 +314,9 @@ namespace NumberGuessingGame
                 
                 // TODO: Update player statistics (Part 3)
             }
-            
+
+            gameWon = false;
+            currentAttempts = 0;
             Console.WriteLine("----------------------------------------");
         }
         
@@ -269,12 +335,13 @@ namespace NumberGuessingGame
             Console.WriteLine("              FINAL STATS                  ");
             Console.WriteLine("===========================================");
             Console.WriteLine($"Player: {currentPlayer.Name}");
+            Console.WriteLine($"Number of Players: {numPlayers}");
             Console.WriteLine($"Games Played: {currentPlayer.GamesPlayed}");
             Console.WriteLine($"Games Won: {currentPlayer.GamesWon}");
             Console.WriteLine($"Win Rate: {currentPlayer.WinRate:P2}");
             
             // TODO: Display best scores (Part 3 & 5)
-            
+            Console.WriteLine($"Best Score: {bestScore}");
             Console.WriteLine("\nThanks for playing!");
             Console.WriteLine("===========================================");
         }
