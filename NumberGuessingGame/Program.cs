@@ -89,7 +89,9 @@ namespace NumberGuessingGame
                 // Generate target number - FIX ME! (Part 1)
                 GenerateTargetNumber();
                 
+                // add timer start
                 PlayGame();
+                // add timer stop
                 
                 DisplayGameResults();
                 
