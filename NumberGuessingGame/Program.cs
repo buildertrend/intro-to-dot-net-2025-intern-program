@@ -80,7 +80,7 @@ namespace NumberGuessingGame
         // FIX ME: This method has a bug in the random number generation (Part 1)
         private void GenerateTargetNumber()
         {            
-            Random random = new Random(42); 
+            Random random = new Random();
             
             // The range depends on the difficulty level
             switch (currentDifficulty)
