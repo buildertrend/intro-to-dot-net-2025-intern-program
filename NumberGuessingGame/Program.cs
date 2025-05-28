@@ -24,16 +24,34 @@ namespace NumberGuessingGame
         private int attemptsLimit;
         private int currentAttempts;
         private bool gameWon;
+
+        private bool Players;
         private DifficultyLevel currentDifficulty;
 
         // Constructor to initialize the game
         public GameManager()
         {
             currentPlayer = new Player();
-            // Default difficulty is set to medium
-            currentDifficulty = askDifficulty();
+            
         }
+        private bool singlePlayer()
+        {
+            Console.WriteLine("Single Player(Type S) or Multi Player(Type M)");
+            String response = Console.ReadLine().Trim().ToUpper();
+            if (response.Equals("S"))
+            {
+                return true;
+            }
+            else if (response.Equals("M"))
+            {
+                return false;
 
+            }
+            else
+            {
+                return singlePlayer();
+            }
+        }
         // Main game loop
         public void StartGame()
         {
@@ -43,8 +61,9 @@ namespace NumberGuessingGame
 
             while (continuePlaying)
             {
-                // TODO: Add difficulty selection menu here (Part 2)
-                
+                // Default difficulty is set to medium
+                currentDifficulty = askDifficulty();
+                Players = singlePlayer();
                 // Initialize game settings based on difficulty
                 InitializeGameSettings();
                 
@@ -60,10 +79,7 @@ namespace NumberGuessingGame
 
             DisplayFinalStats();
         }
-        private void difficultyChooser()
-        {
             
-        }
         private void DisplayWelcomeMessage()
         {
             Console.WriteLine("===========================================");
@@ -210,14 +226,14 @@ namespace NumberGuessingGame
                 Console.WriteLine("Congratulations! You won the game!", Console.ForegroundColor);
                 currentPlayer.GamesWon++;
 
-                if (attempts > currentPlayer.record)
+                if (attempts < currentPlayer.record)
                 {
                     Console.WriteLine("New Record! " + attempts + " attempts");
                     currentPlayer.record = attempts;
                 }
                 else
                 {
-                    Console.WriteLine("You were " + (attempts - currentPlayer.record) + " away from the record");
+                    Console.WriteLine("You were " + (currentPlayer.record - attempts) + " away from the record");
                }
             }
             else
