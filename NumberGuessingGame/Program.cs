@@ -126,6 +126,7 @@ namespace NumberGuessingGame
                 default:
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine("That is not a valid selection!");
+                    Console.ResetColor();
                     DifficultySelection();
                     break;
             }
@@ -263,10 +264,6 @@ namespace NumberGuessingGame
                 Console.ResetColor();
 
                 // TODO: Update player statistics (Part 3)
-                if (currentPlayer.BestScore < currentAttempts)
-                {
-                    currentPlayer.BestScore = currentAttempts;
-                }
             }
             
             Console.WriteLine("----------------------------------------");
