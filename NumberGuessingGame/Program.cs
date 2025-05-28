@@ -80,7 +80,7 @@ namespace NumberGuessingGame
         // FIX ME: This method has a bug in the random number generation (Part 1)
         private void GenerateTargetNumber()
         {            
-            Random random = new Random(42); 
+            Random random = new Random(); 
             
             // The range depends on the difficulty level
             switch (currentDifficulty)
@@ -137,19 +137,23 @@ namespace NumberGuessingGame
                 {
                     gameWon = true;
                     // TODO: Add color to the console output (Part 4)
+                    Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine($"\nCorrect! You guessed the number in {currentAttempts} attempts.");
                 }
                 else
                 {
                     // TODO: Add color to the console output (Part 4)
                     string hint = guess < targetNumber ? "higher" : "lower";
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"Wrong! Try a {hint} number. Attempts left: {attemptsLimit - currentAttempts}");
                 }
             }
         }
 
         private void DisplayGameInfo()
+
         {
+            Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine($"Difficulty: {currentDifficulty}");
             Console.WriteLine($"Guess a number between 1 and {GetRangeForDifficulty()}");
             Console.WriteLine($"You have {attemptsLimit} attempts.");
@@ -182,6 +186,7 @@ namespace NumberGuessingGame
                 if (!validInput)
                 {
                     // TODO: Add color to the console output (Part 4)
+                    Console.ForegroundColor = ConsoleColor.Cyan;
                     Console.WriteLine("Invalid input! Please enter a number.");
                 }
                 else if (guess < 1 || guess > GetRangeForDifficulty())
