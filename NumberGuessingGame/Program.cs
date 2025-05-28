@@ -24,6 +24,15 @@ namespace NumberGuessingGame
         private int currentAttempts;
         private bool gameWon;
         private DifficultyLevel currentDifficulty;
+        
+        private int lowestGuesses = 500;
+
+        Dictionary<string, int> difficultyScoresHashmap = new Dictionary<string, int>()
+        {
+            { "easy", 500 },
+            { "medium", 500 },
+            { "hard", 500 }
+        };
 
         // Constructor to initialize the game
         public GameManager()
@@ -63,9 +72,9 @@ namespace NumberGuessingGame
         private void SelectDifficulty()
         {
             Console.WriteLine("We're gonna play a number guessing game. select which difficulty you'd like");
-            Console.WriteLine("Easy, 1-50");
-            Console.WriteLine("Medium, 1-100");
-            Console.WriteLine("Hard, 1-500");
+            Console.WriteLine("easy, 1-50");
+            Console.WriteLine("medium, 1-100");
+            Console.WriteLine("hard, 1-500");
 
             // make this into a seperate function
             // while loop
@@ -79,23 +88,23 @@ namespace NumberGuessingGame
             {
                 string difficultyInput = Console.ReadLine();
 
-                if (difficultyInput == "Easy")
+                if (difficultyInput == "easy")
                 {
-                    Console.WriteLine("You chose Easy");
+                    Console.WriteLine("You chose easy");
                     currentDifficulty = DifficultyLevel.Easy;
                     break;
                 }
 
-                else if (difficultyInput == "Medium")
+                else if (difficultyInput == "medium")
                 {
-                    Console.WriteLine("You chose Medium");
+                    Console.WriteLine("You chose medium");
                     currentDifficulty = DifficultyLevel.Medium;
                     break;
                 }
 
-                else if (difficultyInput == "Hard")
+                else if (difficultyInput == "hard")
                 {
-                    Console.WriteLine("You chose Hard");
+                    Console.WriteLine("You chose hard");
                     currentDifficulty = DifficultyLevel.Hard;
                     break;
                 }
@@ -136,8 +145,6 @@ namespace NumberGuessingGame
                                           // using Random(35) causes the number 2 to be generated every time
                                           // so i think we should just use Random() instead of Random(42)
                                           // yes, using Random() is the solution
-
-
 
             // The range depends on the difficulty level
             switch (currentDifficulty)
@@ -264,10 +271,34 @@ namespace NumberGuessingGame
                 Console.BackgroundColor = ConsoleColor.Blue;
                 Console.WriteLine("Congratulations! You won the game!");
                 currentPlayer.GamesWon++;
-                
+
 
                 // TODO: Update player statistics (Part 3)
                 // Update the best score for the current difficulty level
+
+                // probably should break this into a function and also maybe figure out how to not use 300 million if statements
+                // not printing the congratulations! line. i wonder why. debugger might help.
+                if (currentAttempts < lowestGuesses ^ lowestGuesses == 500)
+                {
+
+                    if (currentDifficulty == DifficultyLevel.Easy)
+                    {
+                        difficultyScoresHashmap["easy"] = currentAttempts;
+                        Console.WriteLine("Congratulations! You have a new low score for the " + currentDifficulty + " :" + currentAttempts);
+                    }
+
+                    else if (currentDifficulty == DifficultyLevel.Medium)
+                    {
+                        difficultyScoresHashmap["medium"] = currentAttempts;
+                        Console.WriteLine("Congratulations! You have a new low score for the " + currentDifficulty + " :" + currentAttempts);
+                    }
+
+                    else if (currentDifficulty == DifficultyLevel.Hard)
+                    {
+                        difficultyScoresHashmap["hard"] = currentAttempts;
+                        Console.WriteLine("Congratulations! You have a new low score for the " + currentDifficulty + " :" + currentAttempts);
+                    }
+                }
 
             }
             else
@@ -280,6 +311,7 @@ namespace NumberGuessingGame
                 currentPlayer.GamesLost++;
 
                 // TODO: Update player statistics (Part 3)
+                // look in the display final stats function
             }
             
             Console.WriteLine("----------------------------------------");
