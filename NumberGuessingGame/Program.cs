@@ -43,6 +43,7 @@ namespace NumberGuessingGame
             while (continuePlaying)
             {
                 // TODO: Add difficulty selection menu here (Part 2)
+                ChooseDifficulty();
                 
                 // Initialize game settings based on difficulty
                 InitializeGameSettings();
@@ -62,16 +63,20 @@ namespace NumberGuessingGame
 
         private void DisplayWelcomeMessage()
         {
+            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("===========================================");
             Console.WriteLine("   Welcome to the NUMBER GUESSING GAME!   ");
             Console.WriteLine("===========================================");
+            Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("\nPlease enter your name:");
             
             string playerName = Console.ReadLine();
             currentPlayer.Name = string.IsNullOrWhiteSpace(playerName) ? "Player" : playerName;
-            
+
+            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine($"\nHello, {currentPlayer.Name}!");
             Console.WriteLine("I'm thinking of a number... Can you guess it?");
+            Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("\nPress any key to start!");
             Console.ReadKey();
             Console.Clear();
@@ -80,7 +85,7 @@ namespace NumberGuessingGame
         // FIX ME: This method has a bug in the random number generation (Part 1)
         private void GenerateTargetNumber()
         {            
-            Random random = new Random(42); 
+            Random random = new Random(); 
             
             // The range depends on the difficulty level
             switch (currentDifficulty)
@@ -99,10 +104,35 @@ namespace NumberGuessingGame
                     break;
             }
         }
-        
+
+        private void ChooseDifficulty()
+        {
+            Console.WriteLine("Please choose which difficulty you want to play (Easy, Medium, Hard): ");
+            string desiredDifficulty = Console.ReadLine();
+
+            if (desiredDifficulty != null)
+            {
+                //defines difficulty per user input
+                if (desiredDifficulty.Equals(DifficultyLevel.Easy))
+                {
+                    currentDifficulty = DifficultyLevel.Easy;
+                }
+                else if (desiredDifficulty.Equals(DifficultyLevel.Medium))
+                {
+                    currentDifficulty = DifficultyLevel.Medium;
+                }
+                else if (desiredDifficulty.Equals(DifficultyLevel.Hard))
+                {
+                    currentDifficulty = DifficultyLevel.Hard;
+                }
+            }
+        }
+
+
         private void InitializeGameSettings()
         {
             // Initialize game variables based on difficulty
+
             switch (currentDifficulty)
             {
                 case DifficultyLevel.Easy:
@@ -117,8 +147,9 @@ namespace NumberGuessingGame
                 default:
                     attemptsLimit = 7; // Default to medium
                     break;
-            }
-            
+                }
+   
+
             currentAttempts = 0;
             gameWon = false;
         }
@@ -137,12 +168,14 @@ namespace NumberGuessingGame
                 {
                     gameWon = true;
                     // TODO: Add color to the console output (Part 4)
+                    Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine($"\nCorrect! You guessed the number in {currentAttempts} attempts.");
                 }
                 else
                 {
                     // TODO: Add color to the console output (Part 4)
                     string hint = guess < targetNumber ? "higher" : "lower";
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"Wrong! Try a {hint} number. Attempts left: {attemptsLimit - currentAttempts}");
                 }
             }
@@ -150,6 +183,7 @@ namespace NumberGuessingGame
 
         private void DisplayGameInfo()
         {
+            Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine($"Difficulty: {currentDifficulty}");
             Console.WriteLine($"Guess a number between 1 and {GetRangeForDifficulty()}");
             Console.WriteLine($"You have {attemptsLimit} attempts.");
@@ -174,6 +208,7 @@ namespace NumberGuessingGame
             
             while (!validInput)
             {
+                Console.ForegroundColor = ConsoleColor.White;
                 Console.Write($"\nAttempt {currentAttempts + 1}/{attemptsLimit}. Enter your guess: ");
                 string input = Console.ReadLine();
                 
@@ -182,11 +217,13 @@ namespace NumberGuessingGame
                 if (!validInput)
                 {
                     // TODO: Add color to the console output (Part 4)
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Invalid input! Please enter a number.");
                 }
                 else if (guess < 1 || guess > GetRangeForDifficulty())
                 {
                     // TODO: Add color to the console output (Part 4)
+                    Console.ForegroundColor = ConsoleColor.Cyan;
                     Console.WriteLine($"Your guess must be between 1 and {GetRangeForDifficulty()}!");
                     validInput = false;
                 }
@@ -202,6 +239,7 @@ namespace NumberGuessingGame
             if (gameWon)
             {
                 // TODO: Add color to the console output (Part 4)
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Congratulations! You won the game!");
                 currentPlayer.GamesWon++;
                 
@@ -211,6 +249,7 @@ namespace NumberGuessingGame
             else
             {
                 // TODO: Add color to the console output (Part 4)
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Game Over! You've run out of attempts.");
                 Console.WriteLine($"The number was: {targetNumber}");
                 currentPlayer.GamesLost++;
@@ -232,6 +271,7 @@ namespace NumberGuessingGame
         private void DisplayFinalStats()
         {
             Console.Clear();
+            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("===========================================");
             Console.WriteLine("              FINAL STATS                  ");
             Console.WriteLine("===========================================");
