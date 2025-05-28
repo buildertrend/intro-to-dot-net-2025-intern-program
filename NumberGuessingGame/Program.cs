@@ -42,12 +42,13 @@ namespace NumberGuessingGame
 
             while (continuePlaying)
             {
+                // Difficulty selection menu here
                 DisplayDifficultySelection();
 
                 // Initialize game settings based on difficulty
                 InitializeGameSettings();
                 
-                // Generate target number - FIX ME! (Part 1)
+                // Generate target number
                 GenerateTargetNumber();
                 
                 PlayGame();
