@@ -43,7 +43,26 @@ namespace NumberGuessingGame
             while (continuePlaying)
             {
                 // TODO: Add difficulty selection menu here (Part 2)
-                
+                Console.WriteLine("Select Difficulty Level: 1-Easy. 2-Medium. 3-Hard");
+
+                string difficulty = Console.ReadLine();
+
+                switch (difficulty)
+                {
+                    case "1":
+                        currentDifficulty = DifficultyLevel.Easy;
+                        break;
+                    case "2":
+                        currentDifficulty = DifficultyLevel.Medium;
+                        break;
+                    case "3":
+                        currentDifficulty = DifficultyLevel.Hard;
+                        break;
+                    default:
+                        Console.WriteLine("Invalid Difficulty Level.");
+                        continue;
+                }
+
                 // Initialize game settings based on difficulty
                 InitializeGameSettings();
                 
