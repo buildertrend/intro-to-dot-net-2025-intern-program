@@ -20,6 +20,7 @@ namespace NumberGuessingGame
     {
         private Player currentPlayer;
         private int targetNumber;
+        private int attempts;
         private int attemptsLimit;
         private int currentAttempts;
         private bool gameWon;
@@ -30,7 +31,7 @@ namespace NumberGuessingGame
         {
             currentPlayer = new Player();
             // Default difficulty is set to medium
-            currentDifficulty = DifficultyLevel.Medium;
+            currentDifficulty = askDifficulty();
         }
 
         // Main game loop
@@ -59,7 +60,10 @@ namespace NumberGuessingGame
 
             DisplayFinalStats();
         }
-
+        private void difficultyChooser()
+        {
+            
+        }
         private void DisplayWelcomeMessage()
         {
             Console.WriteLine("===========================================");
@@ -132,7 +136,7 @@ namespace NumberGuessingGame
             {
                 int guess = GetUserGuess();
                 currentAttempts++;
-                
+                attempts = currentAttempts;
                 if (guess == targetNumber)
                 {
                     gameWon = true;
@@ -199,25 +203,30 @@ namespace NumberGuessingGame
         private void DisplayGameResults()
         {
             Console.WriteLine("\n----------------------------------------");
-            
+
             if (gameWon)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
-                // TODO: Add color to the console output (Part 4)
-                Console.WriteLine("Congratulations! You won the game!",Console.ForegroundColor);
+                Console.WriteLine("Congratulations! You won the game!", Console.ForegroundColor);
                 currentPlayer.GamesWon++;
-                
-                // TODO: Update player statistics (Part 3)
-                // Update the best score for the current difficulty level
+
+                if (attempts > currentPlayer.record)
+                {
+                    Console.WriteLine("New Record! " + attempts + " attempts");
+                    currentPlayer.record = attempts;
+                }
+                else
+                {
+                    Console.WriteLine("You were " + (attempts - currentPlayer.record) + " away from the record");
+               }
             }
             else
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                // TODO: Add color to the console output (Part 4)
-                Console.WriteLine("Game Over! You've run out of attempts.",Console.ForegroundColor);
+                Console.WriteLine("Game Over! You've run out of attempts.", Console.ForegroundColor);
                 Console.WriteLine($"The number was: {targetNumber}");
                 currentPlayer.GamesLost++;
-                
+
                 // TODO: Update player statistics (Part 3)
             }
             
@@ -231,7 +240,30 @@ namespace NumberGuessingGame
             
             return response == "Y" || response == "YES";
         }
-        
+        private DifficultyLevel askDifficulty()
+        {
+            Console.WriteLine("Choose difficulty (easy,medium, or hard)"); 
+            string response = Console.ReadLine().Trim().ToUpper();
+            while (true) {
+                if (response.Equals("EASY"))
+                {
+                    return DifficultyLevel.Easy;
+                }
+                else if (response.Equals("MEDIUM"))
+                {
+                    return DifficultyLevel.Medium;
+                }
+                else if (response.Equals("HARD"))
+                {
+                    return DifficultyLevel.Hard;
+                }
+                else
+                {
+                Console.WriteLine("Choose difficulty (easy,medium, or hard)"); 
+                response = Console.ReadLine().Trim().ToUpper();
+                }
+            }
+        }
         private void DisplayFinalStats()
         {
             Console.Clear();
@@ -240,11 +272,19 @@ namespace NumberGuessingGame
             Console.WriteLine("===========================================");
             Console.WriteLine($"Player: {currentPlayer.Name}");
             Console.WriteLine($"Games Played: {currentPlayer.GamesPlayed}");
+            if (currentPlayer.record >= 8)
+            {
+                Console.WriteLine($"Record: N/A");
+            }
+            else
+            {
+                Console.WriteLine($"Record: {currentPlayer.record}");
+            }
             Console.WriteLine($"Games Won: {currentPlayer.GamesWon}");
             Console.WriteLine($"Win Rate: {currentPlayer.WinRate:P2}");
-            
+
             // TODO: Display best scores (Part 3 & 5)
-            
+
             Console.WriteLine("\nThanks for playing!");
             Console.WriteLine("===========================================");
         }
@@ -265,7 +305,7 @@ namespace NumberGuessingGame
         public int GamesPlayed => GamesWon + GamesLost;
         public int GamesWon { get; set; }
         public int GamesLost { get; set; }
-        
+        public int record = 8;
         // Calculate win rate as a percentage
         public double WinRate => GamesPlayed == 0 ? 0 : (double)GamesWon / GamesPlayed;
 
