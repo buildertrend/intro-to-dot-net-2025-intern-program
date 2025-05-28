@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NumberGuessingGame
+﻿namespace NumberGuessingGame
 {
 
     class Program
@@ -10,7 +8,7 @@ namespace NumberGuessingGame
         {
             // Initialize game manager
             GameManager gameManager = new GameManager();
-            
+
             // Start the game loop
             gameManager.StartGame();
         }
@@ -37,6 +35,9 @@ namespace NumberGuessingGame
         // Main game loop
         public void StartGame()
         {
+
+            currentPlayer.BestScore = int.MaxValue;
+
             bool continuePlaying = true;
 
             DisplayWelcomeMessage();
@@ -45,17 +46,17 @@ namespace NumberGuessingGame
             {
                 // TODO: Add difficulty selection menu here (Part 2)
                 // ADDED ^^^
-                
+
                 // Initialize game settings based on difficulty
                 InitializeGameSettings();
-                
+
                 // Generate target number - FIXED
                 GenerateTargetNumber();
-                
+
                 PlayGame();
-                
+
                 DisplayGameResults();
-                
+
                 continuePlaying = AskToPlayAgain();
             }
 
@@ -68,7 +69,7 @@ namespace NumberGuessingGame
             Console.WriteLine("   Welcome to the NUMBER GUESSING GAME!   ");
             Console.WriteLine("===========================================");
             Console.WriteLine("\nPlease enter your name:");
-            
+
             string playerName = Console.ReadLine();
             currentPlayer.Name = string.IsNullOrWhiteSpace(playerName) ? "Player" : playerName;
 
@@ -129,7 +130,7 @@ namespace NumberGuessingGame
                     break;
             }
         }
-        
+
         private void InitializeGameSettings()
         {
             // Initialize game variables based on difficulty
@@ -148,7 +149,7 @@ namespace NumberGuessingGame
                     attemptsLimit = 7; // Default to medium
                     break;
             }
-            
+
             currentAttempts = 0;
             gameWon = false;
         }
@@ -162,7 +163,7 @@ namespace NumberGuessingGame
             {
                 int guess = GetUserGuess();
                 currentAttempts++;
-                
+
                 if (guess == targetNumber)
                 {
                     gameWon = true;
@@ -207,14 +208,14 @@ namespace NumberGuessingGame
         {
             int guess = 0;
             bool validInput = false;
-            
+
             while (!validInput)
             {
                 Console.Write($"\nAttempt {currentAttempts + 1}/{attemptsLimit}. Enter your guess: ");
                 string input = Console.ReadLine();
-                
+
                 validInput = int.TryParse(input, out guess);
-                
+
                 if (!validInput)
                 {
                     // TODO: Add color to the console output (Part 4)
@@ -227,28 +228,26 @@ namespace NumberGuessingGame
                     validInput = false;
                 }
             }
-            
+
             return guess;
         }
-        
+
         private void DisplayGameResults()
         {
             Console.WriteLine("\n----------------------------------------");
-            
+
             if (gameWon)
             {
                 // TODO: Add color to the console output (Part 4)
                 Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"Congratulations! You won the game with a score of {currentAttempts}!");
+                Console.ResetColor();
                 currentPlayer.GamesWon++;
 
-                // TODO: Update player statistics (Part 3)
+                // TODO: Update player statistics (Part 3) -- DONE
                 // Update the best score for the current difficulty level
-                if (currentPlayer.BestScore == 0 || currentAttempts < currentPlayer.BestScore)
+                if (currentAttempts < currentPlayer.BestScore)
                     currentPlayer.BestScore = currentAttempts;
-
-
-                Console.WriteLine($"Congratulations! You won the game with a best score of {currentPlayer.BestScore}!");
-                Console.ResetColor();
             }
             else
             {
@@ -256,21 +255,21 @@ namespace NumberGuessingGame
                 Console.WriteLine("Game Over! You've run out of attempts.");
                 Console.WriteLine($"The number was: {targetNumber}");
                 currentPlayer.GamesLost++;
-                
+
                 // TODO: Update player statistics (Part 3)
             }
-            
+
             Console.WriteLine("----------------------------------------");
         }
-        
+
         private bool AskToPlayAgain()
         {
             Console.Write("\nWould you like to play again? (Y/N): ");
             string response = Console.ReadLine().Trim().ToUpper();
-            
+
             return response == "Y" || response == "YES";
         }
-        
+
         private void DisplayFinalStats()
         {
             Console.Clear();
@@ -281,10 +280,10 @@ namespace NumberGuessingGame
             Console.WriteLine($"Games Played: {currentPlayer.GamesPlayed}");
             Console.WriteLine($"Games Won: {currentPlayer.GamesWon}");
             Console.WriteLine($"Win Rate: {currentPlayer.WinRate:P2}");
-            
+
             // TODO: Display best scores (Part 3 & 5)
             Console.WriteLine($"Best Score: {currentPlayer.BestScore}");
-            
+
             Console.WriteLine("\nThanks for playing!");
             Console.WriteLine("===========================================");
         }
@@ -306,11 +305,11 @@ namespace NumberGuessingGame
         public int GamesWon { get; set; }
         public int GamesLost { get; set; }
         public int BestScore { get; set; }
-        
+
         // Calculate win rate as a percentage
         public double WinRate => GamesPlayed == 0 ? 0 : (double)GamesWon / GamesPlayed;
 
-        // TODO: Implement tracking of best scores (Part 3 & 5)
+        // TODO: Implement tracking of best scores (Part 3 & 5) -- DONE
         // Add properties to track the best score (fewest attempts) for each difficulty level
     }
 }
