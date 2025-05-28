@@ -79,9 +79,8 @@ namespace NumberGuessingGame
 
         // FIX ME: This method has a bug in the random number generation (Part 1)
         private void GenerateTargetNumber()
-        {
-            // BUG: This always generates the same sequence of numbers
-            Random random = new Random(42); // Remove the seed value of 42 to fix
+        {            
+            Random random = new Random(42); 
             
             // The range depends on the difficulty level
             switch (currentDifficulty)
