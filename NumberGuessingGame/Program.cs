@@ -257,9 +257,14 @@ namespace NumberGuessingGame
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Congratulations! You won the game!");
                 currentPlayer.GamesWon++;
-                
+
                 // TODO: Update player statistics (Part 3)
                 // Update the best score for the current difficulty level
+                int bestScore = currentPlayer.BestScores[(int)currentDifficulty];
+                if (bestScore < currentAttempts)
+                {
+                    currentPlayer.BestScores[(int)currentDifficulty] = currentAttempts;
+                }
             }
             else
             {
@@ -268,13 +273,16 @@ namespace NumberGuessingGame
                 Console.WriteLine("Game Over! You've run out of attempts.");
                 Console.WriteLine($"The number was: {targetNumber}");
                 currentPlayer.GamesLost++;
-                
+
                 // TODO: Update player statistics (Part 3)
+                currentPlayer.GamesLost++;
             }
 
             Console.ResetColor();
             
             Console.WriteLine("----------------------------------------");
+
+            DisplayFinalStats();
         }
         
         private bool AskToPlayAgain()
@@ -295,8 +303,13 @@ namespace NumberGuessingGame
             Console.WriteLine($"Games Played: {currentPlayer.GamesPlayed}");
             Console.WriteLine($"Games Won: {currentPlayer.GamesWon}");
             Console.WriteLine($"Win Rate: {currentPlayer.WinRate:P2}");
-            
+
             // TODO: Display best scores (Part 3 & 5)
+            int score = currentPlayer.BestScores[(int)currentDifficulty];
+            if (score != 0)
+            {
+                Console.WriteLine($"Best Score ({currentDifficulty}): {score}");
+            }
             
             Console.WriteLine("\nThanks for playing!");
             Console.WriteLine("===========================================");
@@ -324,5 +337,6 @@ namespace NumberGuessingGame
 
         // TODO: Implement tracking of best scores (Part 3 & 5)
         // Add properties to track the best score (fewest attempts) for each difficulty level
+        public int[] BestScores { get; set; } = [0, 0, 0];
     }
 }
