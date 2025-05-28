@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq.Expressions;
+using System.Transactions;
 
 namespace NumberGuessingGame
 {
@@ -43,6 +45,7 @@ namespace NumberGuessingGame
             while (continuePlaying)
             {
                 // TODO: Add difficulty selection menu here (Part 2)
+                SelectDifficultyLevel();
                 
                 // Initialize game settings based on difficulty
                 InitializeGameSettings();
@@ -80,7 +83,7 @@ namespace NumberGuessingGame
         // FIX ME: This method has a bug in the random number generation (Part 1)
         private void GenerateTargetNumber()
         {            
-            Random random = new Random(42); 
+            Random random = new Random(); 
             
             // The range depends on the difficulty level
             switch (currentDifficulty)
@@ -99,7 +102,49 @@ namespace NumberGuessingGame
                     break;
             }
         }
-        
+
+        // Function to select the dificulty level of the game
+        private void SelectDifficultyLevel()
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("SelectDifficulty");
+            Console.WriteLine("(1)  1-50 -> Easy ");
+            Console.WriteLine("(2)  1-100 -> Medium ");
+            Console.WriteLine("(3)  1-500 -> Hard ");
+            Console.Write("Enter a number from 1-3   ");
+            Console.ResetColor();
+
+            string val = Console.ReadLine();
+
+            switch (val)
+            {
+                case "1":
+                    currentDifficulty = DifficultyLevel.Easy;
+                    break;
+
+                case "2":
+                    currentDifficulty = DifficultyLevel.Medium;
+                    break;
+                case "3":
+                    currentDifficulty = DifficultyLevel.Hard;
+                    break;
+                default:
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Error Please select a number between 1-3");
+                    Console.ResetColor();
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("So Switching to Medium mode as default");
+                    Console.ResetColor();
+                    currentDifficulty = DifficultyLevel.Medium;
+                    break; 
+
+            }
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("Selected Difficulty is : {currentDifficulty}");
+            Console.WriteLine("Press to continue");
+            Console.ReadKey();
+            Console.ResetColor();
+        }
         private void InitializeGameSettings()
         {
             // Initialize game variables based on difficulty
@@ -137,19 +182,24 @@ namespace NumberGuessingGame
                 {
                     gameWon = true;
                     // TODO: Add color to the console output (Part 4)
+                    Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine($"\nCorrect! You guessed the number in {currentAttempts} attempts.");
+                    Console.ResetColor();
                 }
                 else
                 {
                     // TODO: Add color to the console output (Part 4)
+                    Console.ForegroundColor = ConsoleColor.Red;
                     string hint = guess < targetNumber ? "higher" : "lower";
                     Console.WriteLine($"Wrong! Try a {hint} number. Attempts left: {attemptsLimit - currentAttempts}");
+                    Console.ResetColor();
                 }
             }
         }
 
         private void DisplayGameInfo()
         {
+           
             Console.WriteLine($"Difficulty: {currentDifficulty}");
             Console.WriteLine($"Guess a number between 1 and {GetRangeForDifficulty()}");
             Console.WriteLine($"You have {attemptsLimit} attempts.");
@@ -182,12 +232,16 @@ namespace NumberGuessingGame
                 if (!validInput)
                 {
                     // TODO: Add color to the console output (Part 4)
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Invalid input! Please enter a number.");
+                    Console.ResetColor();
                 }
                 else if (guess < 1 || guess > GetRangeForDifficulty())
                 {
                     // TODO: Add color to the console output (Part 4)
+                    Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine($"Your guess must be between 1 and {GetRangeForDifficulty()}!");
+                    Console.ResetColor();
                     validInput = false;
                 }
             }
@@ -202,7 +256,9 @@ namespace NumberGuessingGame
             if (gameWon)
             {
                 // TODO: Add color to the console output (Part 4)
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Congratulations! You won the game!");
+                Console.ResetColor();
                 currentPlayer.GamesWon++;
                 
                 // TODO: Update player statistics (Part 3)
@@ -211,8 +267,12 @@ namespace NumberGuessingGame
             else
             {
                 // TODO: Add color to the console output (Part 4)
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Game Over! You've run out of attempts.");
+                Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine($"The number was: {targetNumber}");
+                Console.ResetColor();
                 currentPlayer.GamesLost++;
                 
                 // TODO: Update player statistics (Part 3)
@@ -268,5 +328,8 @@ namespace NumberGuessingGame
 
         // TODO: Implement tracking of best scores (Part 3 & 5)
         // Add properties to track the best score (fewest attempts) for each difficulty level
+
+        // method to select difficulty 
+        
     }
 }
