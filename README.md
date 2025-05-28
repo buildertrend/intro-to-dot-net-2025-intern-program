@@ -4,6 +4,7 @@
 This 3-hour workshop will introduce you to Git version control and .NET development through a hands-on project. You'll be enhancing a Number Guessing Game console application using C#.
 [Link to Speaker Notes](https://gist.github.com/tcorradi-bt/7b75afd24b1a15b97488fa88342e4fcf)
 
+
 ## Schedule
 - **0:00-0:10:** Welcome & Introductions
 - **0:10-0:25:** Git Essentials
