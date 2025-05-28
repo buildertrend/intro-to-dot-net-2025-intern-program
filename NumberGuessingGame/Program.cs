@@ -37,6 +37,7 @@ namespace NumberGuessingGame
         public void StartGame()
         {
             bool continuePlaying = true;
+            Console.ResetColor();
 
             DisplayWelcomeMessage();
 
@@ -81,6 +82,7 @@ namespace NumberGuessingGame
 
         private void DisplayWelcomeMessage()
         {
+            Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine("===========================================");
             Console.WriteLine("   Welcome to the NUMBER GUESSING GAME!   ");
             Console.WriteLine("===========================================");
@@ -156,6 +158,7 @@ namespace NumberGuessingGame
                 {
                     gameWon = true;
                     // TODO: Add color to the console output (Part 4)
+                    Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine($"\nCorrect! You guessed the number in {currentAttempts} attempts.");
                 }
                 else
