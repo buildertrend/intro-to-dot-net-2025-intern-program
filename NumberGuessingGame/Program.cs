@@ -1,5 +1,7 @@
 ﻿using System;
 
+//changes
+
 namespace NumberGuessingGame
 {
     class Program
@@ -9,7 +11,7 @@ namespace NumberGuessingGame
         {
             // Initialize game manager
             GameManager gameManager = new GameManager();
-            
+
             // Start the game loop
             gameManager.StartGame();
         }
@@ -43,17 +45,17 @@ namespace NumberGuessingGame
             while (continuePlaying)
             {
                 // TODO: Add difficulty selection menu here (Part 2)
-                
+
                 // Initialize game settings based on difficulty
                 InitializeGameSettings();
-                
+
                 // Generate target number - FIX ME! (Part 1)
                 GenerateTargetNumber();
-                
+
                 PlayGame();
-                
+
                 DisplayGameResults();
-                
+
                 continuePlaying = AskToPlayAgain();
             }
 
@@ -66,10 +68,10 @@ namespace NumberGuessingGame
             Console.WriteLine("   Welcome to the NUMBER GUESSING GAME!   ");
             Console.WriteLine("===========================================");
             Console.WriteLine("\nPlease enter your name:");
-            
+
             string playerName = Console.ReadLine();
             currentPlayer.Name = string.IsNullOrWhiteSpace(playerName) ? "Player" : playerName;
-            
+
             Console.WriteLine($"\nHello, {currentPlayer.Name}!");
             Console.WriteLine("I'm thinking of a number... Can you guess it?");
             Console.WriteLine("\nPress any key to start!");
@@ -79,9 +81,9 @@ namespace NumberGuessingGame
 
         // FIX ME: This method has a bug in the random number generation (Part 1)
         private void GenerateTargetNumber()
-        {            
-            Random random = new Random(42); 
-            
+        {
+            Random random = new Random(42);
+
             // The range depends on the difficulty level
             switch (currentDifficulty)
             {
@@ -99,7 +101,7 @@ namespace NumberGuessingGame
                     break;
             }
         }
-        
+
         private void InitializeGameSettings()
         {
             // Initialize game variables based on difficulty
@@ -118,7 +120,7 @@ namespace NumberGuessingGame
                     attemptsLimit = 7; // Default to medium
                     break;
             }
-            
+
             currentAttempts = 0;
             gameWon = false;
         }
@@ -132,7 +134,7 @@ namespace NumberGuessingGame
             {
                 int guess = GetUserGuess();
                 currentAttempts++;
-                
+
                 if (guess == targetNumber)
                 {
                     gameWon = true;
@@ -171,14 +173,14 @@ namespace NumberGuessingGame
         {
             int guess = 0;
             bool validInput = false;
-            
+
             while (!validInput)
             {
                 Console.Write($"\nAttempt {currentAttempts + 1}/{attemptsLimit}. Enter your guess: ");
                 string input = Console.ReadLine();
-                
+
                 validInput = int.TryParse(input, out guess);
-                
+
                 if (!validInput)
                 {
                     // TODO: Add color to the console output (Part 4)
@@ -191,20 +193,20 @@ namespace NumberGuessingGame
                     validInput = false;
                 }
             }
-            
+
             return guess;
         }
-        
+
         private void DisplayGameResults()
         {
             Console.WriteLine("\n----------------------------------------");
-            
+
             if (gameWon)
             {
                 // TODO: Add color to the console output (Part 4)
                 Console.WriteLine("Congratulations! You won the game!");
                 currentPlayer.GamesWon++;
-                
+
                 // TODO: Update player statistics (Part 3)
                 // Update the best score for the current difficulty level
             }
@@ -214,21 +216,21 @@ namespace NumberGuessingGame
                 Console.WriteLine("Game Over! You've run out of attempts.");
                 Console.WriteLine($"The number was: {targetNumber}");
                 currentPlayer.GamesLost++;
-                
+
                 // TODO: Update player statistics (Part 3)
             }
-            
+
             Console.WriteLine("----------------------------------------");
         }
-        
+
         private bool AskToPlayAgain()
         {
             Console.Write("\nWould you like to play again? (Y/N): ");
             string response = Console.ReadLine().Trim().ToUpper();
-            
+
             return response == "Y" || response == "YES";
         }
-        
+
         private void DisplayFinalStats()
         {
             Console.Clear();
@@ -239,9 +241,9 @@ namespace NumberGuessingGame
             Console.WriteLine($"Games Played: {currentPlayer.GamesPlayed}");
             Console.WriteLine($"Games Won: {currentPlayer.GamesWon}");
             Console.WriteLine($"Win Rate: {currentPlayer.WinRate:P2}");
-            
+
             // TODO: Display best scores (Part 3 & 5)
-            
+
             Console.WriteLine("\nThanks for playing!");
             Console.WriteLine("===========================================");
         }
@@ -262,7 +264,7 @@ namespace NumberGuessingGame
         public int GamesPlayed => GamesWon + GamesLost;
         public int GamesWon { get; set; }
         public int GamesLost { get; set; }
-        
+
         // Calculate win rate as a percentage
         public double WinRate => GamesPlayed == 0 ? 0 : (double)GamesWon / GamesPlayed;
 
