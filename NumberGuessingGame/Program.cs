@@ -60,28 +60,85 @@ namespace NumberGuessingGame
             DisplayFinalStats();
         }
 
+        private void SelectDifficulty()
+        {
+            Console.WriteLine("We're gonna play a number guessing game. select which difficulty you'd like");
+            Console.WriteLine("Easy, 1-50");
+            Console.WriteLine("Medium, 1-100");
+            Console.WriteLine("Hard, 1-500");
+
+            // make this into a seperate function
+            // while loop
+            // get user input
+            // normalize input
+            // if not easy medum or hard, re run the loop
+            // set currentDifficulty to whatever was chosen
+            // tell them which one they chose
+
+            while (true)
+            {
+                string difficultyInput = Console.ReadLine();
+
+                if (difficultyInput == "Easy")
+                {
+                    Console.WriteLine("You chose Easy");
+                    currentDifficulty = DifficultyLevel.Easy;
+                    break;
+                }
+
+                else if (difficultyInput == "Medium")
+                {
+                    Console.WriteLine("You chose Medium");
+                    currentDifficulty = DifficultyLevel.Medium;
+                    break;
+                }
+
+                else if (difficultyInput == "Hard")
+                {
+                    Console.WriteLine("You chose Hard");
+                    currentDifficulty = DifficultyLevel.Hard;
+                    break;
+                }
+
+                else
+                {
+                    Console.WriteLine("Enter the correct word ");
+                }
+            }
+        }
+
         private void DisplayWelcomeMessage()
         {
             Console.WriteLine("===========================================");
             Console.WriteLine("   Welcome to the NUMBER GUESSING GAME!   ");
             Console.WriteLine("===========================================");
             Console.WriteLine("\nPlease enter your name:");
-            
+
             string playerName = Console.ReadLine();
             currentPlayer.Name = string.IsNullOrWhiteSpace(playerName) ? "Player" : playerName;
-            
+
             Console.WriteLine($"\nHello, {currentPlayer.Name}!");
+            SelectDifficulty();
+
             Console.WriteLine("I'm thinking of a number... Can you guess it?");
+
             Console.WriteLine("\nPress any key to start!");
             Console.ReadKey();
             Console.Clear();
         }
 
         // FIX ME: This method has a bug in the random number generation (Part 1)
+            // - Done
         private void GenerateTargetNumber()
-        {            
-            Random random = new Random(42); 
-            
+        {
+            Random random = new Random(); // the bug that causes the same number to be generated every time is right here.
+                                          // using Random(42) causes the number 67 to be generated every time
+                                          // using Random(35) causes the number 2 to be generated every time
+                                          // so i think we should just use Random() instead of Random(42)
+                                          // yes, using Random() is the solution
+
+
+
             // The range depends on the difficulty level
             switch (currentDifficulty)
             {
@@ -102,6 +159,7 @@ namespace NumberGuessingGame
         
         private void InitializeGameSettings()
         {
+
             // Initialize game variables based on difficulty
             switch (currentDifficulty)
             {
@@ -198,23 +256,29 @@ namespace NumberGuessingGame
         private void DisplayGameResults()
         {
             Console.WriteLine("\n----------------------------------------");
-            
+
             if (gameWon)
             {
                 // TODO: Add color to the console output (Part 4)
+                Console.ForegroundColor = ConsoleColor.Green; // text shows up as black, idk why
+                Console.BackgroundColor = ConsoleColor.Blue;
                 Console.WriteLine("Congratulations! You won the game!");
                 currentPlayer.GamesWon++;
                 
+
                 // TODO: Update player statistics (Part 3)
                 // Update the best score for the current difficulty level
+
             }
             else
             {
                 // TODO: Add color to the console output (Part 4)
+                Console.ForegroundColor = ConsoleColor.Gray; // text shows up as black, idk why
+                Console.BackgroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Game Over! You've run out of attempts.");
                 Console.WriteLine($"The number was: {targetNumber}");
                 currentPlayer.GamesLost++;
-                
+
                 // TODO: Update player statistics (Part 3)
             }
             
@@ -225,7 +289,11 @@ namespace NumberGuessingGame
         {
             Console.Write("\nWould you like to play again? (Y/N): ");
             string response = Console.ReadLine().Trim().ToUpper();
-            
+
+            // reset colors
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.BackgroundColor = ConsoleColor.Black;
+
             return response == "Y" || response == "YES";
         }
         
