@@ -108,9 +108,9 @@ namespace NumberGuessingGame
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("SelectDifficulty");
-            Console.WriteLine("(1)  1-50 -> Easy ");
-            Console.WriteLine("(2)  1-100 -> Medium ");
-            Console.WriteLine("(3)  1-500 -> Hard ");
+            Console.WriteLine("(1)  1-50 -> Easy  Attempts -> 10");
+            Console.WriteLine("(2)  1-100 -> Medium Attempts -> 7");
+            Console.WriteLine("(3)  1-500 -> Hard Attempts -> 5");
             Console.Write("Enter a number from 1-3   ");
             Console.ResetColor();
 
@@ -140,7 +140,7 @@ namespace NumberGuessingGame
 
             }
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("Selected Difficulty is : {currentDifficulty}");
+            Console.WriteLine($"Selected Difficulty is : {currentDifficulty}");
             Console.WriteLine("Press to continue");
             Console.ReadKey();
             Console.ResetColor();
@@ -260,6 +260,8 @@ namespace NumberGuessingGame
                 Console.WriteLine("Congratulations! You won the game!");
                 Console.ResetColor();
                 currentPlayer.GamesWon++;
+
+                UpdateHighScore();
                 
                 // TODO: Update player statistics (Part 3)
                 // Update the best score for the current difficulty level
@@ -280,7 +282,39 @@ namespace NumberGuessingGame
             
             Console.WriteLine("----------------------------------------");
         }
-        
+
+
+
+        // method to update the highest score  and calling it in DisplayGameResult only when won.
+
+        private void UpdateHighScore()
+        {
+            switch (currentDifficulty)
+            {
+                case DifficultyLevel.Easy:
+                    if (currentPlayer.HighScoreEasy==0||currentAttempts<currentPlayer.HighScoreEasy)
+                    {
+                        currentPlayer.HighScoreEasy = currentAttempts;
+                    }
+                    break;
+                case DifficultyLevel.Medium:
+                    if (currentPlayer.HighScoreMedium == 0 || currentAttempts < currentPlayer.HighScoreMedium)
+                    {
+                        currentPlayer.HighScoreMedium = currentAttempts;
+                    }
+                    break;
+                case DifficultyLevel.Hard:
+                    if (currentPlayer.HighScoreHard == 0 || currentAttempts < currentPlayer.HighScoreHard)
+                    {
+                        currentPlayer.HighScoreHard = currentAttempts;
+                    }
+                    break;
+
+            }
+        }
+
+
+
         private bool AskToPlayAgain()
         {
             Console.Write("\nWould you like to play again? (Y/N): ");
@@ -299,13 +333,33 @@ namespace NumberGuessingGame
             Console.WriteLine($"Games Played: {currentPlayer.GamesPlayed}");
             Console.WriteLine($"Games Won: {currentPlayer.GamesWon}");
             Console.WriteLine($"Win Rate: {currentPlayer.WinRate:P2}");
-            
+
             // TODO: Display best scores (Part 3 & 5)
+            ShowHighScore();
             
             Console.WriteLine("\nThanks for playing!");
             Console.WriteLine("===========================================");
         }
+        // method to show thet Highest score and called in Displayfinalstats 
+        private void ShowHighScore()
+        {
+            Console.WriteLine("High Score");
+
+            if (currentPlayer.HighScoreEasy > 0)
+            {
+                Console.WriteLine($"{currentPlayer.HighScoreEasy}  is the Highest Score ");
+            }
+            if (currentPlayer.HighScoreMedium > 0)
+            {
+                Console.WriteLine($"{currentPlayer.HighScoreMedium}  is the Highest Score ");
+            }
+            if (currentPlayer.HighScoreHard > 0)
+            {
+                Console.WriteLine($"{currentPlayer.HighScoreHard}  is the Highest Score ");
+            }
+        }
     }
+
 
     // Enumeration for difficulty levels
     enum DifficultyLevel
@@ -318,7 +372,7 @@ namespace NumberGuessingGame
     // Class to store player information and statistics
     class Player
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = "Player";
         public int GamesPlayed => GamesWon + GamesLost;
         public int GamesWon { get; set; }
         public int GamesLost { get; set; }
@@ -330,6 +384,9 @@ namespace NumberGuessingGame
         // Add properties to track the best score (fewest attempts) for each difficulty level
 
         // method to select difficulty 
-        
+        public int HighScoreEasy { get; set; }
+        public int HighScoreMedium { get; set; }
+        public int HighScoreHard { get; set; }
+
     }
 }
